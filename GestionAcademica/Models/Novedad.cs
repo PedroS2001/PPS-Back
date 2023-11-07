@@ -10,6 +10,7 @@ public partial class Novedad
     public string Titulo { get; set; } = null!;
 
     public string? Texto { get; set; }
+    public string? Imagen { get; set; }
 
     public DateTime? FechaPublicacion { get; set; }
 }

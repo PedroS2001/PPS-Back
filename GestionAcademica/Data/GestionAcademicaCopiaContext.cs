@@ -191,6 +191,9 @@ public partial class GestionAcademicaCopiaContext : DbContext
             entity.Property(e => e.Texto)
                 .IsUnicode(false)
                 .HasColumnName("texto");
+            entity.Property(e => e.Imagen)
+                .IsUnicode(false)
+                .HasColumnName("imagen");
             entity.Property(e => e.Titulo)
                 .HasMaxLength(50)
                 .IsUnicode(false)

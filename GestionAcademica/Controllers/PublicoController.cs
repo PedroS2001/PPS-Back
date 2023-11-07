@@ -21,9 +21,8 @@ namespace GestionAcademica.Controllers
             _context = context;
         }
 
-        // GET: api/Carreras
         [HttpGet("Carreras")]
-        public async Task<ActionResult<IEnumerable<Object>>> GetCarreras()
+        public async Task<ActionResult<IEnumerable<Carrera>>> GetCarreras()
         {
             if (_context.Carreras == null)
             {
@@ -33,9 +32,8 @@ namespace GestionAcademica.Controllers
             return await _context.Carreras.ToListAsync();
         }
 
-        // GET: api/Carreras/5
         [HttpGet("Materias/{idCarrera}")]
-        public async Task<ActionResult<IEnumerable<Materia>>> GetCarrera(int idCarrera)
+        public async Task<ActionResult<IEnumerable<Materia>>> GetMateriasCarrera(int idCarrera)
         {
             if (_context.Materias == null)
             {
@@ -49,89 +47,21 @@ namespace GestionAcademica.Controllers
             return query.ToList();
         }
 
-        // PUT: api/Carreras/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCarrera(int id, Carrera carrera)
+        [HttpGet("Novedades")]
+        public async Task<ActionResult<IEnumerable<Novedad>>> GetNovedades()
         {
-            if (id != carrera.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(carrera).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CarreraExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Carreras
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Carrera>> PostCarrera(Carrera carrera)
-        {
-            if (_context.Carreras == null)
-            {
-                return Problem("Entity set 'GestionAcademicaCopiaContext.Carreras'  is null.");
-            }
-            _context.Carreras.Add(carrera);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (CarreraExists(carrera.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtAction("GetCarrera", new { id = carrera.Id }, carrera);
-        }
-
-        // DELETE: api/Carreras/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCarrera(int id)
-        {
-            if (_context.Carreras == null)
-            {
-                return NotFound();
-            }
-            var carrera = await _context.Carreras.FindAsync(id);
-            if (carrera == null)
+            if (_context.Novedades == null)
             {
                 return NotFound();
             }
 
-            _context.Carreras.Remove(carrera);
-            await _context.SaveChangesAsync();
+            return _context.Novedades.ToList();
 
-            return NoContent();
         }
 
-        private bool CarreraExists(int id)
-        {
-            return (_context.Carreras?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
+
+
+
+
     }
 }
