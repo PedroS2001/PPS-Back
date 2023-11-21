@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GestionAcademica.Data;
 using GestionAcademica.Models;
+using GestionAcademica.DTO;
 
 namespace GestionAcademica.Controllers
 {
@@ -54,37 +55,30 @@ namespace GestionAcademica.Controllers
         // POST: api/Usuarios
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
+        public async Task<ActionResult<Usuario>> PostUsuario(UsuarioDomicilioDTO usuario)
         {
             if (_context.Usuarios == null)
             {
                 return Problem("Entity set 'GestionAcademicaCopiaContext.Usuarios'  is null.");
             }
-            _context.Usuarios.Add(usuario);
+            _context.Domicilios.Add(usuario.Domicilio);
+            _context.Usuarios.Add(usuario.User);
             try
             {
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
             catch (DbUpdateException)
             {
-                if (UsuarioExists(usuario.Legajo))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
             }
 
-            return CreatedAtAction("GetUsuario", new { id = usuario.Legajo }, usuario);
+            return CreatedAtAction("GetUsuario", new { id = usuario.User.Legajo }, usuario.User);
         }
 
         [HttpPost("Login")]
         public ActionResult<Usuario> IniciarSesion(string correo, string clave)
         {
             var user = _context.Usuarios.Where(x => x.Correo == correo && x.Clave == clave).FirstOrDefault();
-            if(user == null)
+            if (user == null)
             {
                 return Problem("Correo o clave invalida");
             }
@@ -103,18 +97,57 @@ namespace GestionAcademica.Controllers
             return query.ToList();
         }
 
+        [HttpPut("Cursadas/Baja/{legajo}/{idCursada}")]
+        public ActionResult<UsuarioCursada> DarDeBaja(int legajo, int idCursada)
+        {
+            var rta = _context.UsuarioCursada.FirstOrDefault(x => x.IdCursada == idCursada && x.LegajoAlumno == legajo);
+            if (rta == null)
+            {
+                return NotFound();
+            }
+            rta.Activa = 0;
+            _context.SaveChanges();
+
+            return rta;
+        }
+
+        [HttpPost("Cursadas/inscribir/{legajo}/{idCursada}")]
+        public async Task<ActionResult<UsuarioCursada>> InscribirACursada(int legajo, int idCursada)
+        {
+            UsuarioCursada usuarioCursada = new UsuarioCursada() { IdCursada = idCursada, LegajoAlumno = legajo, Activa = 1 };
+            _context.UsuarioCursada.Add(usuarioCursada);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                return BadRequest();
+            }
+
+            return Created("GetUsuario", usuarioCursada);
+        }
+
+
         [HttpGet("Notas/{legajo}")]
-        public ActionResult<List<Nota>> ObtenerNotasUsuario(int legajo)
+        public ActionResult<List<Nota>> GetNotasUsuario(int legajo)
         {
             var query = from n in _context.Notas
                         join a in _context.Usuarios on n.LegajoAlumno equals a.Legajo
                         join c in _context.Cursadas on n.IdCursada equals c.Id
                         join m in _context.Materias on c.IdMateria equals m.Id
                         where a.Legajo == legajo
-                        select new Nota() { LegajoAlumno = a.Legajo, NotaNumerica = n.NotaNumerica, Fecha = n.Fecha, TipoNota = m.Nombre, IdCursada= c.Id };
-
+                        select new Nota() { LegajoAlumno = a.Legajo, NotaNumerica = n.NotaNumerica, Fecha = n.Fecha, TipoNota = m.Nombre, IdCursada = c.Id };
 
             return query.ToList();
+        }
+
+        [HttpGet("Material/{idCursada}")]
+        public ActionResult<List<Material>> GetMaterialCursada(int idCursada)
+        {
+            var rta = _context.Materiales.Where(x => x.IdCursada == idCursada);
+
+            return rta.ToList();
         }
 
 

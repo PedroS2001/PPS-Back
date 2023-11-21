@@ -12,4 +12,7 @@ public partial class Material
     public DateTime FechaPublicacion { get; set; }
 
     public int Tipo { get; set; }
+    public string? Titulo { get; set; }
+    public string? Texto { get; set; }
+    public string? FilePath { get; set; }
 }

@@ -162,6 +162,9 @@ public partial class GestionAcademicaCopiaContext : DbContext
                 .HasColumnName("fecha_publicacion");
             entity.Property(e => e.IdCursada).HasColumnName("id_cursada");
             entity.Property(e => e.Tipo).HasColumnName("tipo");
+            entity.Property(e => e.Titulo).HasColumnName("titulo");
+            entity.Property(e => e.Texto).HasColumnName("texto");
+            entity.Property(e => e.FilePath).HasColumnName("filepath");
         });
 
         modelBuilder.Entity<Nota>(entity =>
@@ -265,13 +268,15 @@ public partial class GestionAcademicaCopiaContext : DbContext
         modelBuilder.Entity<UsuarioCursada>(entity =>
         {
             entity
-                .HasNoKey()
-                .ToTable("Usuario_cursada");
+                .ToTable("Usuario_cursada")
+                .HasKey(t => new { t.IdCursada, t.LegajoAlumno }).HasName("PK_Usuario_cursada");
+            //                .HasNoKey()
 
-            entity.HasIndex(e => e.IdCursada, "IX_Usuario_cursada").IsUnique();
+            //entity.HasIndex(e => e.IdCursada, "IX_Usuario_cursada").IsUnique();
 
             entity.Property(e => e.IdCursada).HasColumnName("id_cursada");
             entity.Property(e => e.LegajoAlumno).HasColumnName("legajo_alumno");
+            entity.Property(e => e.Activa).HasColumnName("activa");
 
 
         });

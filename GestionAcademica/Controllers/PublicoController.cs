@@ -47,6 +47,11 @@ namespace GestionAcademica.Controllers
             return query.ToList();
         }
 
+        /// <summary>
+        /// DOCUMENTACION NOVEDADES
+        /// </summary>
+        /// <response code="201">Created. Objeto correctamente creado en la BD.</response>        
+        /// <returns>pedro</returns>
         [HttpGet("Novedades")]
         public async Task<ActionResult<IEnumerable<Novedad>>> GetNovedades()
         {

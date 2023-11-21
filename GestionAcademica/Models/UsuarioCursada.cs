@@ -8,5 +8,6 @@ public partial class UsuarioCursada
     public int IdCursada { get; set; }
 
     public int LegajoAlumno { get; set; }
+    public int Activa { get; set; }
 
 }
