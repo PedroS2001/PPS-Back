@@ -22,7 +22,7 @@ namespace GestionAcademica.Controllers
             _context = context;
         }
 
-        // GET: api/Usuarios
+        #region Administrador
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
         {
@@ -31,6 +31,32 @@ namespace GestionAcademica.Controllers
                 return NotFound();
             }
             return await _context.Usuarios.ToListAsync();
+        }
+
+        /// <summary>
+        /// Dar de alta a un usuario
+        /// </summary>
+        /// <param name="usuario"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<Usuario>> PostUsuario(UsuarioDomicilioDTO usuario)
+        {
+            if (_context.Usuarios == null)
+            {
+                return Problem("Entity set 'GestionAcademicaCopiaContext.Usuarios'  is null.");
+            }
+            try
+            {
+                _context.Domicilios.Add(usuario.Domicilio);
+                _context.SaveChanges();
+                _context.Usuarios.Add(usuario.User);
+                _context.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+            }
+
+            return CreatedAtAction("GetUsuario", new { id = usuario.User.Legajo }, usuario.User);
         }
 
         [HttpGet("{id}")]
@@ -49,30 +75,7 @@ namespace GestionAcademica.Controllers
 
             return usuario;
         }
-
-
-
-        // POST: api/Usuarios
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Usuario>> PostUsuario(UsuarioDomicilioDTO usuario)
-        {
-            if (_context.Usuarios == null)
-            {
-                return Problem("Entity set 'GestionAcademicaCopiaContext.Usuarios'  is null.");
-            }
-            _context.Domicilios.Add(usuario.Domicilio);
-            _context.Usuarios.Add(usuario.User);
-            try
-            {
-                _context.SaveChanges();
-            }
-            catch (DbUpdateException)
-            {
-            }
-
-            return CreatedAtAction("GetUsuario", new { id = usuario.User.Legajo }, usuario.User);
-        }
+        #endregion
 
         [HttpPost("Login")]
         public ActionResult<Usuario> IniciarSesion(string correo, string clave)
@@ -85,50 +88,11 @@ namespace GestionAcademica.Controllers
             return user;
         }
 
-        [HttpGet("Cursadas/{legajo}")]
-        public ActionResult<List<Materia>> GetCursadasActivasAlumno(int legajo)
-        {
-            var query = from c in _context.Cursadas
-                        join um in _context.UsuarioCursada on c.Id equals um.IdCursada
-                        join m in _context.Materias on c.IdMateria equals m.Id
-                        where um.IdCursada == legajo && c.Activa == 1
-                        select new Materia() { Nombre = m.Nombre, Id = m.Id };
-
-            return query.ToList();
-        }
-
-        [HttpPut("Cursadas/Baja/{legajo}/{idCursada}")]
-        public ActionResult<UsuarioCursada> DarDeBaja(int legajo, int idCursada)
-        {
-            var rta = _context.UsuarioCursada.FirstOrDefault(x => x.IdCursada == idCursada && x.LegajoAlumno == legajo);
-            if (rta == null)
-            {
-                return NotFound();
-            }
-            rta.Activa = 0;
-            _context.SaveChanges();
-
-            return rta;
-        }
-
-        [HttpPost("Cursadas/inscribir/{legajo}/{idCursada}")]
-        public async Task<ActionResult<UsuarioCursada>> InscribirACursada(int legajo, int idCursada)
-        {
-            UsuarioCursada usuarioCursada = new UsuarioCursada() { IdCursada = idCursada, LegajoAlumno = legajo, Activa = 1 };
-            _context.UsuarioCursada.Add(usuarioCursada);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                return BadRequest();
-            }
-
-            return Created("GetUsuario", usuarioCursada);
-        }
-
-
+        /// <summary>
+        /// Trae todas las notas de un alumno
+        /// </summary>
+        /// <param name="legajo"></param>
+        /// <returns></returns>
         [HttpGet("Notas/{legajo}")]
         public ActionResult<List<Nota>> GetNotasUsuario(int legajo)
         {
@@ -140,14 +104,6 @@ namespace GestionAcademica.Controllers
                         select new Nota() { LegajoAlumno = a.Legajo, NotaNumerica = n.NotaNumerica, Fecha = n.Fecha, TipoNota = m.Nombre, IdCursada = c.Id };
 
             return query.ToList();
-        }
-
-        [HttpGet("Material/{idCursada}")]
-        public ActionResult<List<Material>> GetMaterialCursada(int idCursada)
-        {
-            var rta = _context.Materiales.Where(x => x.IdCursada == idCursada);
-
-            return rta.ToList();
         }
 
 

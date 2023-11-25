@@ -21,6 +21,10 @@ namespace GestionAcademica.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Trae todas las carreras y su ID
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("Carreras")]
         public async Task<ActionResult<IEnumerable<Carrera>>> GetCarreras()
         {
@@ -32,6 +36,11 @@ namespace GestionAcademica.Controllers
             return await _context.Carreras.ToListAsync();
         }
 
+        /// <summary>
+        /// Trae todas las materias de una carrera
+        /// </summary>
+        /// <param name="idCarrera"></param>
+        /// <returns></returns>
         [HttpGet("Materias/{idCarrera}")]
         public async Task<ActionResult<IEnumerable<Materia>>> GetMateriasCarrera(int idCarrera)
         {
@@ -48,10 +57,9 @@ namespace GestionAcademica.Controllers
         }
 
         /// <summary>
-        /// DOCUMENTACION NOVEDADES
+        /// Trae todas las novedades
         /// </summary>
-        /// <response code="201">Created. Objeto correctamente creado en la BD.</response>        
-        /// <returns>pedro</returns>
+        /// <returns></returns>
         [HttpGet("Novedades")]
         public async Task<ActionResult<IEnumerable<Novedad>>> GetNovedades()
         {
