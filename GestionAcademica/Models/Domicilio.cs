@@ -7,8 +7,6 @@ public partial class Domicilio
 {
     public int Id { get; set; }
 
-    public int LegajoAlumno { get; set; }
-
     public int IdPais { get; set; }
 
     public string Provincia { get; set; } = null!;

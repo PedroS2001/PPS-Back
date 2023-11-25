@@ -89,6 +89,9 @@ public partial class GestionAcademicaCopiaContext : DbContext
         {
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Activa).HasColumnName("activa");
+            entity.Property(e => e.Anio).HasColumnName("anio");
+            entity.Property(e => e.Dia).HasColumnName("dia");
+            entity.Property(e => e.Turno).HasColumnName("turno");
             entity.Property(e => e.Cuatrimestre).HasColumnName("cuatrimestre");
             entity.Property(e => e.IdMateria).HasColumnName("id_materia");
             entity.Property(e => e.IdProfesor).HasColumnName("id_profesor");
@@ -124,7 +127,6 @@ public partial class GestionAcademicaCopiaContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("departamento");
             entity.Property(e => e.IdPais).HasColumnName("id_pais");
-            entity.Property(e => e.LegajoAlumno).HasColumnName("legajo_alumno");
             entity.Property(e => e.Localidad)
                 .HasMaxLength(50)
                 .IsUnicode(false)
