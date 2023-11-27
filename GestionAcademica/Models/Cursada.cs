@@ -13,7 +13,7 @@ public partial class Cursada
 
     public int? Anio { get; set; }
 
-    public int Activa { get; set; }
+    public int Estado { get; set; }
 
     public int? Dia { get; set; }
 

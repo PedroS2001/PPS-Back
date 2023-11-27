@@ -23,6 +23,17 @@ namespace GestionAcademica.Controllers
         }
 
         /// <summary>
+        /// Trae todas los cursos
+        /// </summary>
+        /// <param name="legajo"></param>
+        /// <returns></returns>
+        [HttpGet("")]
+        public ActionResult<List<Cursada>> GetCursos()
+        {
+            return _context.Cursadas.ToList();
+        }
+
+        /// <summary>
         /// Trae todas las Materias con cursadas activas de un usuario
         /// </summary>
         /// <param name="legajo"></param>
@@ -33,7 +44,7 @@ namespace GestionAcademica.Controllers
             var query = from c in _context.Cursadas
                         join um in _context.UsuarioCursada on c.Id equals um.IdCursada
                         join m in _context.Materias on c.IdMateria equals m.Id
-                        where um.LegajoAlumno == legajo && c.Activa == 1
+                        where um.LegajoAlumno == legajo && c.Estado == (int)EEstadoCursada.Activa
                         select c;
 
             return query.ToList();
@@ -53,27 +64,30 @@ namespace GestionAcademica.Controllers
             {
                 //TODO:  Validar que el alumno tenga las cuotas al dia 
 
-                //Valido que el alumno no tenga otras cursadas en ese horario
+                //TODO:  Validar correlativas.
+
+                #region  Valido que el alumno no tenga otras cursadas en ese horario
                 var query = from c in _context.Cursadas
                             join uc in _context.UsuarioCursada on c.Id equals uc.IdCursada
                             where uc.LegajoAlumno == legajo
                             select c;
 
                 var cursadasAlumno = query.ToList();
-                
+
                 var laCursada = _context.Cursadas.Find(idCursada);
-                if(laCursada == null)
+                if (laCursada == null)
                 {
                     return BadRequest("La cursada no existe");
                 }
 
                 foreach (var cursada in cursadasAlumno)
                 {
-                    if(cursada.Activa == 1 && cursada.Anio == laCursada.Anio && cursada.Cuatrimestre == laCursada.Cuatrimestre && cursada.Dia == laCursada.Dia && cursada.Turno == laCursada.Turno )
+                    if (cursada.Estado == (int)EEstadoCursada.Activa && cursada.Anio == laCursada.Anio && cursada.Cuatrimestre == laCursada.Cuatrimestre && cursada.Dia == laCursada.Dia && cursada.Turno == laCursada.Turno)
                     {
                         return BadRequest("El usuario ya esta inscrito a una cursada en ese horario");
                     }
                 }
+                #endregion
 
                 //Inscribo al alumno en la cursada
                 var user = _context.Usuarios.Find(legajo);
@@ -81,7 +95,7 @@ namespace GestionAcademica.Controllers
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
-            { 
+            {
                 return BadRequest("Ha ocurrido un error al inscribir al alumno a la cursada");
             }
 
@@ -121,6 +135,18 @@ namespace GestionAcademica.Controllers
             return rta.ToList();
         }
 
+        /// <summary>
+        /// Trae todos los temas de una Materia
+        /// </summary>
+        /// <param name="idCursada"></param>
+        /// <returns></returns>
+        [HttpGet("Temario/{idMateria}")]
+        public ActionResult<List<Temario>> GetTemasMateria(int idMateria)
+        {
+            var rta = _context.Temarios.Where(x => x.IdMateria == idMateria);
+
+            return rta.ToList();
+        }
 
         /// <summary>
         /// Dar de alta una cursada
@@ -130,7 +156,7 @@ namespace GestionAcademica.Controllers
         [HttpPost]
         public async Task<ActionResult<Cursada>> CrearCursada(Cursada cursada)
         {
-            
+
             if (_context.Cursadas == null)
             {
                 return Problem("Entity set 'GestionAcademicaCopiaContext.Cursadas'  is null.");
@@ -144,7 +170,7 @@ namespace GestionAcademica.Controllers
             {
             }
 
-            return Created("cursada",cursada);
+            return Created("cursada", cursada);
         }
 
 

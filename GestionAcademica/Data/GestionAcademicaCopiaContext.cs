@@ -88,7 +88,7 @@ public partial class GestionAcademicaCopiaContext : DbContext
         modelBuilder.Entity<Cursada>(entity =>
         {
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Activa).HasColumnName("activa");
+            entity.Property(e => e.Estado).HasColumnName("estado");
             entity.Property(e => e.Anio).HasColumnName("anio");
             entity.Property(e => e.Dia).HasColumnName("dia");
             entity.Property(e => e.Turno).HasColumnName("turno");
@@ -256,6 +256,9 @@ public partial class GestionAcademicaCopiaContext : DbContext
             entity.Property(e => e.FechaNacimiento)
                 .HasColumnType("smalldatetime")
                 .HasColumnName("fecha_nacimiento");
+            entity.Property(e => e.FechaRegistro)
+                .HasColumnType("smalldatetime")
+                .HasColumnName("fecha_registro");
             entity.Property(e => e.IdCarrera).HasColumnName("id_carrera");
             entity.Property(e => e.IdDomicilio).HasColumnName("id_domicilio");
             entity.Property(e => e.Nombre)

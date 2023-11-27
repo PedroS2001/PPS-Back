@@ -39,7 +39,7 @@ namespace GestionAcademica.Controllers
         /// <param name="usuario"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Usuario>> PostUsuario(UsuarioDomicilioDTO usuario)
+        public async Task<ActionResult<Usuario>> CrearUsuario(UsuarioDomicilioDTO usuario)
         {
             if (_context.Usuarios == null)
             {
