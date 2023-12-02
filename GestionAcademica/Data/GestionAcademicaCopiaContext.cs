@@ -42,6 +42,7 @@ public partial class GestionAcademicaCopiaContext : DbContext
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
     public virtual DbSet<UsuarioCursada> UsuarioCursada { get; set; }
+    public virtual DbSet<Asistencia> Asistencias { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -114,7 +115,6 @@ public partial class GestionAcademicaCopiaContext : DbContext
             entity.HasKey(e => e.Id).HasName("PK__Domicili__3213E83F33C789BA");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.Altura).HasColumnName("altura");
             entity.Property(e => e.Calle)
@@ -157,7 +157,6 @@ public partial class GestionAcademicaCopiaContext : DbContext
             entity.HasKey(e => e.IdMaterial).HasName("PK__Material__81E99B8399A7E295");
 
             entity.Property(e => e.IdMaterial)
-                .ValueGeneratedNever()
                 .HasColumnName("id_material");
             entity.Property(e => e.FechaPublicacion)
                 .HasColumnType("smalldatetime")
@@ -235,7 +234,6 @@ public partial class GestionAcademicaCopiaContext : DbContext
             entity.HasKey(e => e.Legajo).HasName("PK__Alumnos__818C9F8612650E45");
 
             entity.Property(e => e.Legajo)
-                .ValueGeneratedNever()
                 .HasColumnName("legajo");
             entity.Property(e => e.Apellido)
                 .HasMaxLength(50)
@@ -283,6 +281,16 @@ public partial class GestionAcademicaCopiaContext : DbContext
             entity.Property(e => e.LegajoAlumno).HasColumnName("legajo_alumno");
             entity.Property(e => e.Activa).HasColumnName("activa");
 
+        });
+
+        modelBuilder.Entity<Asistencia>(entity =>
+        {
+            entity.HasKey(e => e.Id_Asistencia).HasName("PK_Asistencias_1");
+
+            entity.Property(e => e.Id_cursada).HasColumnName("id_cursada");
+            entity.Property(e => e.Legajo_alumno).HasColumnName("legajo_alumno");
+            entity.Property(e => e.Concurrio).HasColumnName("concurrio");
+            entity.Property(e => e.Fecha).HasColumnName("fecha");
 
         });
 

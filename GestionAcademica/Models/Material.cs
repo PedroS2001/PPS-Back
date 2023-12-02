@@ -5,7 +5,7 @@ namespace GestionAcademica.Models;
 
 public partial class Material
 {
-    public int IdMaterial { get; set; }
+    public int? IdMaterial { get; set; }
 
     public int IdCursada { get; set; }
 

@@ -49,11 +49,13 @@ namespace GestionAcademica.Controllers
             {
                 _context.Domicilios.Add(usuario.Domicilio);
                 _context.SaveChanges();
+                usuario.User.IdDomicilio = usuario.Domicilio.Id;
                 _context.Usuarios.Add(usuario.User);
                 _context.SaveChanges();
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException ex)
             {
+                return BadRequest(ex.Message);
             }
 
             return CreatedAtAction("GetUsuario", new { id = usuario.User.Legajo }, usuario.User);

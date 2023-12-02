@@ -13,4 +13,6 @@ public partial class Novedad
     public string? Imagen { get; set; }
 
     public DateTime? FechaPublicacion { get; set; }
+    public int? SnMostrar { get; set; }
+
 }

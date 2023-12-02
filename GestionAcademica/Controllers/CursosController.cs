@@ -136,6 +136,21 @@ namespace GestionAcademica.Controllers
         }
 
         /// <summary>
+        /// Trae todos los materiasles de una cursada
+        /// </summary>
+        /// <param name="idCursada"></param>
+        /// <returns></returns>
+        [HttpPost("Material")]
+        public ActionResult<Material> AgregarMaterialCursada(Material material)
+        {
+            var rta = _context.Materiales.Add(material);
+            _context.SaveChanges();
+
+            return Created("Material", material);
+        }
+
+
+        /// <summary>
         /// Trae todos los temas de una Materia
         /// </summary>
         /// <param name="idCursada"></param>
@@ -173,6 +188,33 @@ namespace GestionAcademica.Controllers
             return Created("cursada", cursada);
         }
 
+        /// <summary>
+        /// Trae todos los alumnos de una cursada
+        /// </summary>
+        /// <param name="idCursada"></param>
+        /// <returns></returns>
+        [HttpGet("Alumnos/{idCursada}")]
+        public ActionResult<List<Usuario>> GetAlumnosCursada(int idCursada)
+        {
+            var query = from c in _context.UsuarioCursada
+                        join a in _context.Usuarios on c.LegajoAlumno equals a.Legajo
+                        where c.IdCursada == idCursada && a.TipoUsuario == 1
+                        select a;
+            //var rta = _context.Temarios.Where(x => x.IdMateria == idCursada);
+
+            return query.ToList();
+        }
+
+        [HttpPost("CargarAsistencias")]
+        public ActionResult<List<Asistencia>> CargarAsistencias(List<Asistencia> asistencias)
+        {
+            
+            this._context.Asistencias.AddRange(asistencias);
+            this._context.SaveChanges();
+            //var rta = _context.Temarios.Where(x => x.IdMateria == idCursada);
+
+            return asistencias;
+        }
 
 
 
