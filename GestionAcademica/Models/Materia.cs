@@ -9,4 +9,6 @@ public partial class Materia
 
     public string? Nombre { get; set; }
 
+    public int CargaHoraria { get; set; }
+
 }

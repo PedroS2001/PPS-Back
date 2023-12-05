@@ -15,4 +15,9 @@ public partial class Cuota
 
     public double Monto { get; set; }
 
+    public DateTime FechaVencimiento { get; set; }
+
+    public DateTime FechaPago { get; set; }
+
+
 }

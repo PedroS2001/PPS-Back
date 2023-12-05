@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GestionAcademica.Data;
 using GestionAcademica.Models;
+using GestionAcademica.DTO;
+using Newtonsoft.Json.Linq;
 
 namespace GestionAcademica.Controllers
 {
@@ -26,14 +28,34 @@ namespace GestionAcademica.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("Carreras")]
-        public async Task<ActionResult<IEnumerable<Carrera>>> GetCarreras()
+        public ActionResult<IEnumerable<FacultadCarrerasDTO>> GetCarreras()
         {
             if (_context.Carreras == null)
             {
                 return NotFound();
             }
+            var carreras = _context.Carreras.ToList();
 
-            return await _context.Carreras.ToListAsync();
+            //Las Agrupo por Facultades
+            List<FacultadCarrerasDTO> resultados = new List<FacultadCarrerasDTO>();
+
+            foreach (var carrera in carreras)
+            {
+                int indice = resultados.FindIndex(x => x.NombreFacultad == carrera.Facultad);
+                if (indice >= 0)
+                {
+                    resultados[indice].Carreras.Add(carrera);
+                }
+                else
+                {
+                    FacultadCarrerasDTO aux = new FacultadCarrerasDTO();
+                    aux.NombreFacultad = carrera.Facultad;
+                    aux.Carreras.Add(carrera);
+                    resultados.Add(aux);
+                }
+            }
+
+            return resultados;
         }
 
         /// <summary>
@@ -42,7 +64,7 @@ namespace GestionAcademica.Controllers
         /// <param name="idCarrera"></param>
         /// <returns></returns>
         [HttpGet("Materias/{idCarrera}")]
-        public async Task<ActionResult<IEnumerable<Materia>>> GetMateriasCarrera(int idCarrera)
+        public async Task<ActionResult<IEnumerable<MateriasDTO>>> GetMateriasCarrera(int idCarrera)
         {
             if (_context.Materias == null)
             {
@@ -50,10 +72,14 @@ namespace GestionAcademica.Controllers
             }
             var query = from cm in _context.CarrerasMaterias
                         join m in _context.Materias on cm.IdMateria equals m.Id
+                        join co in _context.Correlativas on m.Id equals co.IdMateria into com
+                        from res in com.DefaultIfEmpty()
                         where cm.IdCarrera == idCarrera
-                        select m;
+                        select new MateriasDTO { IdMateria = m.Id, Nombre = m.Nombre, Cuatrimestre = cm.Cuatrimestre, Correlativas = res.IdMateriaCorrelativa.GetValueOrDefault(), CargaHoraria = m.CargaHoraria };
 
-            return query.ToList();
+            var pepe = query.ToList();
+
+            return query.OrderBy(x => x.Cuatrimestre).ToList();
         }
 
         /// <summary>

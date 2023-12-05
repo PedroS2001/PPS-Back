@@ -80,9 +80,9 @@ namespace GestionAcademica.Controllers
         #endregion
 
         [HttpPost("Login")]
-        public ActionResult<Usuario> IniciarSesion(string correo, string clave)
+        public ActionResult<Usuario> IniciarSesion(Usuario usuario)
         {
-            var user = _context.Usuarios.Where(x => x.Correo == correo && x.Clave == clave).FirstOrDefault();
+            var user = _context.Usuarios.Where(x => x.Correo == usuario.Correo && x.Clave == usuario.Clave).FirstOrDefault();
             if (user == null)
             {
                 return Problem("Correo o clave invalida");

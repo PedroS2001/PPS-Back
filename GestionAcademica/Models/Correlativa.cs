@@ -5,8 +5,8 @@ namespace GestionAcademica.Models;
 
 public partial class Correlativa
 {
-    public int IdMateria { get; set; }
+    public int? IdMateria { get; set; }
 
-    public int IdMateriaCorrelativa { get; set; }
+    public int? IdMateriaCorrelativa { get; set; }
 
 }

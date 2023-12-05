@@ -8,7 +8,7 @@ public partial class Novedad
     public int Id { get; set; }
 
     public string Titulo { get; set; } = null!;
-
+    public string? Copete { get; set; }
     public string? Texto { get; set; }
     public string? Imagen { get; set; }
 

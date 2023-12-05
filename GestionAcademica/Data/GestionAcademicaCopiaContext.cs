@@ -61,6 +61,11 @@ public partial class GestionAcademicaCopiaContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("nombre");
+            entity.Property(e => e.Facultad)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("facultad");
+
         });
 
         modelBuilder.Entity<Correlativa>(entity =>
@@ -83,6 +88,8 @@ public partial class GestionAcademicaCopiaContext : DbContext
             entity.Property(e => e.LegajoAlumno).HasColumnName("legajo_alumno");
             entity.Property(e => e.Mes).HasColumnName("mes");
             entity.Property(e => e.Monto).HasColumnName("monto");
+            entity.Property(e => e.FechaVencimiento).HasColumnName("fecha_vencimiento");
+            entity.Property(e => e.FechaPago).HasColumnName("fecha_pago");
 
         });
 
@@ -103,9 +110,9 @@ public partial class GestionAcademicaCopiaContext : DbContext
             entity.HasNoKey()
                 .ToTable("carrera_materia");
 
-
             entity.Property(e => e.IdCarrera).HasColumnName("id_carrera");
             entity.Property(e => e.IdMateria).HasColumnName("id_materia");
+            entity.Property(e => e.Cuatrimestre).HasColumnName("cuatrimestre");
 
         });
 
@@ -150,6 +157,8 @@ public partial class GestionAcademicaCopiaContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("nombre");
+            entity.Property(e => e.CargaHoraria).HasColumnName("carga_horaria");
+
         });
 
         modelBuilder.Entity<Material>(entity =>
@@ -186,12 +195,18 @@ public partial class GestionAcademicaCopiaContext : DbContext
 
         modelBuilder.Entity<Novedad>(entity =>
         {
-            entity.HasNoKey();
+            entity.HasKey(e => e.Id).HasName("PK_Novedades");
 
             entity.Property(e => e.FechaPublicacion)
                 .HasColumnType("smalldatetime")
                 .HasColumnName("fecha_publicacion");
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.SnMostrar).HasColumnName("sn_mostrar")
+                .HasColumnName("sn_mostrar");
+            entity.Property(e => e.Copete).HasColumnName("copete")
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("copete");
             entity.Property(e => e.Texto)
                 .IsUnicode(false)
                 .HasColumnName("texto");

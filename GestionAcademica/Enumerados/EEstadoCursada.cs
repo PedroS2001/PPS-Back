@@ -1,6 +1,7 @@
 ﻿public enum EEstadoCursada
 {
-    Finalizada = 0,
-    Activa = 1,
-    SinAsignar = 2
+    SinAsignar = 0,
+    Asignada = 1,
+    Activa = 2,
+    Finalizada = 3
 }
