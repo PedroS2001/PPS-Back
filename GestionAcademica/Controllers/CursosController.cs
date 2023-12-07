@@ -39,13 +39,32 @@ namespace GestionAcademica.Controllers
         /// <param name="legajo"></param>
         /// <returns></returns>
         [HttpGet("{legajo}")]
-        public ActionResult<List<Cursada>> GetCursadasActivasAlumno(int legajo)
+        public ActionResult<List<CursadaDTO>> GetCursadasActivasAlumno(int legajo)
         {
             var query = from c in _context.Cursadas
                         join um in _context.UsuarioCursada on c.Id equals um.IdCursada
                         join m in _context.Materias on c.IdMateria equals m.Id
+                        join p in _context.Usuarios on c.IdProfesor equals p.Legajo
                         where um.LegajoAlumno == legajo && c.Estado == (int)EEstadoCursada.Activa
-                        select c;
+                        select new CursadaDTO { Id = c.Id, Materia = m.Nombre, Turno = ((ETurno)c.Turno).ToString() , Dia = ((EDias)c.Dia).ToString(), Profesor = p.Apellido };
+
+            return query.ToList();
+        }
+
+        /// <summary>
+        /// Trae todas las Materias de la carrera del alumno
+        /// </summary>
+        /// <param name="legajo"></param>
+        /// <returns></returns>
+        [HttpGet("ParaInscribir")]
+        public ActionResult<List<CursadaDTO>> GetCursadasParaInscribir()
+        {
+            var query = from c in _context.Cursadas
+                            //join um in _context.UsuarioCursada on c.Id equals um.IdCursada
+                        join m in _context.Materias on c.IdMateria equals m.Id
+                        join p in _context.Usuarios on c.IdProfesor equals p.Legajo
+                        where c.Estado == (int)EEstadoCursada.Asignada
+                        select new CursadaDTO { Id = c.Id, Materia = m.Nombre, Turno = ((ETurno)c.Turno).ToString(), Dia = ((EDias)c.Dia).ToString(), Profesor = p.Apellido };
 
             return query.ToList();
         }
