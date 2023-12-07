@@ -45,7 +45,7 @@ namespace GestionAcademica.Controllers
                         join um in _context.UsuarioCursada on c.Id equals um.IdCursada
                         join m in _context.Materias on c.IdMateria equals m.Id
                         join p in _context.Usuarios on c.IdProfesor equals p.Legajo
-                        where um.LegajoAlumno == legajo && c.Estado == (int)EEstadoCursada.Activa
+                        where um.LegajoAlumno == legajo && c.Estado == (int)EEstadoCursada.Activa && um.Activa == 1
                         select new CursadaDTO { Id = c.Id, Materia = m.Nombre, Turno = ((ETurno)c.Turno).ToString() , Dia = ((EDias)c.Dia).ToString(), Profesor = p.Apellido };
 
             return query.ToList();
@@ -88,7 +88,7 @@ namespace GestionAcademica.Controllers
                 #region  Valido que el alumno no tenga otras cursadas en ese horario
                 var query = from c in _context.Cursadas
                             join uc in _context.UsuarioCursada on c.Id equals uc.IdCursada
-                            where uc.LegajoAlumno == legajo
+                            where uc.LegajoAlumno == legajo && uc.Activa == 1
                             select c;
 
                 var cursadasAlumno = query.ToList();
