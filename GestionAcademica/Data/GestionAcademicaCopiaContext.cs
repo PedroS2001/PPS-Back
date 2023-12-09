@@ -179,7 +179,9 @@ public partial class GestionAcademicaCopiaContext : DbContext
 
         modelBuilder.Entity<Nota>(entity =>
         {
-            entity.HasNoKey();
+            //entity.HasNoKey();
+
+            entity.HasKey(e => e.Id_nota).HasName("PK_Notas");
 
             entity.Property(e => e.Fecha)
                 .HasColumnType("smalldatetime")
@@ -187,10 +189,7 @@ public partial class GestionAcademicaCopiaContext : DbContext
             entity.Property(e => e.IdCursada).HasColumnName("id_cursada");
             entity.Property(e => e.LegajoAlumno).HasColumnName("legajo_alumno");
             entity.Property(e => e.NotaNumerica).HasColumnName("nota_numerica");
-            entity.Property(e => e.TipoNota)
-                .HasMaxLength(20)
-                .IsUnicode(false)
-                .HasColumnName("tipo_nota");
+            entity.Property(e => e.TipoNota).HasColumnName("tipo_nota");
         });
 
         modelBuilder.Entity<Novedad>(entity =>

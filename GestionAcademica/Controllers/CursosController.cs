@@ -46,7 +46,7 @@ namespace GestionAcademica.Controllers
                         join m in _context.Materias on c.IdMateria equals m.Id
                         join p in _context.Usuarios on c.IdProfesor equals p.Legajo
                         where um.LegajoAlumno == legajo && c.Estado == (int)EEstadoCursada.Activa && um.Activa == 1
-                        select new CursadaDTO { Id = c.Id, Materia = m.Nombre, Turno = ((ETurno)c.Turno).ToString() , Dia = ((EDias)c.Dia).ToString(), Profesor = p.Apellido };
+                        select new CursadaDTO { Id = c.Id, Materia = m.Nombre, Turno = ((ETurno)c.Turno).ToString(), Dia = ((EDias)c.Dia).ToString(), Profesor = p.Apellido };
 
             return query.ToList();
         }
@@ -113,6 +113,10 @@ namespace GestionAcademica.Controllers
                 _context.UsuarioCursada.Add(usuarioCursada);
                 await _context.SaveChangesAsync();
             }
+            catch (DbUpdateException ex)
+            {
+                return BadRequest("El alumno ya esta inscrito a esta meteria.");
+            }
             catch (Exception ex)
             {
                 return BadRequest("Ha ocurrido un error al inscribir al alumno a la cursada");
@@ -162,6 +166,7 @@ namespace GestionAcademica.Controllers
         [HttpPost("Material")]
         public ActionResult<Material> AgregarMaterialCursada(Material material)
         {
+            material.FechaPublicacion = DateTime.Now;
             var rta = _context.Materiales.Add(material);
             _context.SaveChanges();
 
@@ -227,7 +232,7 @@ namespace GestionAcademica.Controllers
         [HttpPost("CargarAsistencias")]
         public ActionResult<List<Asistencia>> CargarAsistencias(List<Asistencia> asistencias)
         {
-            
+
             this._context.Asistencias.AddRange(asistencias);
             this._context.SaveChanges();
             //var rta = _context.Temarios.Where(x => x.IdMateria == idCursada);
@@ -235,7 +240,36 @@ namespace GestionAcademica.Controllers
             return asistencias;
         }
 
+        [HttpPost("CargarNotas")]
+        public ActionResult<List<Nota>> CargarNotas(List<Nota> notas)
+        {
+            try
+            {
+                foreach (var item in notas)
+                {
+                    item.Fecha = DateTime.Now;
+                }
+                _context.Notas.AddRange(notas);
+                this._context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
+            return notas;
+        }
+
+        /// <summary>
+        /// Trae todos los alumnos de una cursada
+        /// </summary>
+        /// <param name="idCursada"></param>
+        /// <returns></returns>
+        [HttpGet("Notas/{idCursada}")]
+        public ActionResult<object> GetNotasAlumnosCursada(int idCursada)
+        {
+            return _context.Notas.Where(x => x.IdCursada == idCursada).ToList();
+        }
 
 
     }

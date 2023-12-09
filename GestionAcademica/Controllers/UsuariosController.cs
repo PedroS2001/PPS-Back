@@ -103,7 +103,7 @@ namespace GestionAcademica.Controllers
                         join c in _context.Cursadas on n.IdCursada equals c.Id
                         join m in _context.Materias on c.IdMateria equals m.Id
                         where a.Legajo == legajo
-                        select new Nota() { LegajoAlumno = a.Legajo, NotaNumerica = n.NotaNumerica, Fecha = n.Fecha, TipoNota = m.Nombre, IdCursada = c.Id };
+                        select new Nota() { LegajoAlumno = a.Legajo, NotaNumerica = n.NotaNumerica, Fecha = n.Fecha, TipoNota = n.TipoNota, IdCursada = c.Id };
 
             return query.ToList();
         }
