@@ -98,6 +98,23 @@ namespace GestionAcademica.Controllers
 
         }
 
+        /// <summary>
+        /// Trae todas las novedades
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("Novedad/{idNovedad}")]
+        public async Task<ActionResult<Novedad>> GetNovedad(int idNovedad)
+        {
+            if (_context.Novedades == null)
+            {
+                return NotFound();
+            }
+
+            return _context.Novedades.Where(x => x.Id == idNovedad).FirstOrDefault();
+
+        }
+
+
 
 
 

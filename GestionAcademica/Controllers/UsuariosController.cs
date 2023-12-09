@@ -96,14 +96,14 @@ namespace GestionAcademica.Controllers
         /// <param name="legajo"></param>
         /// <returns></returns>
         [HttpGet("Notas/{legajo}")]
-        public ActionResult<List<Nota>> GetNotasUsuario(int legajo)
+        public ActionResult<List<NotaDTO>> GetNotasUsuario(int legajo)
         {
             var query = from n in _context.Notas
                         join a in _context.Usuarios on n.LegajoAlumno equals a.Legajo
                         join c in _context.Cursadas on n.IdCursada equals c.Id
                         join m in _context.Materias on c.IdMateria equals m.Id
-                        where a.Legajo == legajo
-                        select new Nota() { LegajoAlumno = a.Legajo, NotaNumerica = n.NotaNumerica, Fecha = n.Fecha, TipoNota = n.TipoNota, IdCursada = c.Id };
+                        where a.Legajo == legajo && n.TipoNota == (int)ETipoNota.Final
+                        select new NotaDTO() { NombreMateria = m.Nombre, Fecha = (DateTime)n.Fecha, NotaNumerica = n.NotaNumerica };
 
             return query.ToList();
         }

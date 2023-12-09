@@ -115,7 +115,7 @@ namespace GestionAcademica.Controllers
             }
             catch (DbUpdateException ex)
             {
-                return BadRequest("El alumno ya esta inscrito a esta meteria.");
+                return BadRequest("El alumno ya esta inscrito a esta materia.");
             }
             catch (Exception ex)
             {
