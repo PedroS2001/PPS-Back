@@ -63,6 +63,23 @@ namespace GestionAcademica.Controllers
         /// </summary>
         /// <param name="idCarrera"></param>
         /// <returns></returns>
+        [HttpGet("Materias")]
+        public async Task<ActionResult<IEnumerable<Materia>>> GetMateriasCarrera()
+        {
+            if (_context.Materias == null)
+            {
+                return NotFound();
+            }
+
+
+            return _context.Materias.ToList();
+        }
+
+        /// <summary>
+        /// Trae todas las materias de una carrera
+        /// </summary>
+        /// <param name="idCarrera"></param>
+        /// <returns></returns>
         [HttpGet("Materias/{idCarrera}")]
         public async Task<ActionResult<IEnumerable<MateriasDTO>>> GetMateriasCarrera(int idCarrera)
         {

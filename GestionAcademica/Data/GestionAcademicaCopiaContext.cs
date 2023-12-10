@@ -40,6 +40,7 @@ public partial class GestionAcademicaCopiaContext : DbContext
     public virtual DbSet<Temario> Temarios { get; set; }
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
+    public virtual DbSet<Postulacion> Postulaciones { get; set; }
 
     public virtual DbSet<UsuarioCursada> UsuarioCursada { get; set; }
     public virtual DbSet<Asistencia> Asistencias { get; set; }
@@ -76,6 +77,17 @@ public partial class GestionAcademicaCopiaContext : DbContext
             entity.Property(e => e.IdMateriaCorrelativa).HasColumnName("id_materia_correlativa");
 
         });
+
+        modelBuilder.Entity<Postulacion>(entity =>
+        {
+            entity.HasNoKey();
+
+            entity.Property(e => e.IdCursada).HasColumnName("id_cursada");
+            entity.Property(e => e.LegajoProfesor).HasColumnName("legajo_profesor");
+            entity.Property(e => e.Estado).HasColumnName("estado");
+
+        });
+
 
         modelBuilder.Entity<Cuota>(entity =>
         {

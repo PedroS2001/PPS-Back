@@ -1,6 +1,6 @@
 ﻿public enum ETurno
 {
-    Mañana,
+    Mañana = 1,
     Tarde,
     Noche
 }

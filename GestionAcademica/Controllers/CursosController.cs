@@ -28,10 +28,32 @@ namespace GestionAcademica.Controllers
         /// <param name="legajo"></param>
         /// <returns></returns>
         [HttpGet("")]
-        public ActionResult<List<Cursada>> GetCursos()
+        public ActionResult<object> GetCursos()
         {
-            return _context.Cursadas.ToList();
+            var query = from a in _context.Cursadas
+                        join b in _context.Usuarios on a.IdProfesor equals b.Legajo
+                        join c in _context.Materias on a.IdMateria equals c.Id
+                        select new CursadaDTO { Id = a.Id, Materia = c.Nombre, Turno = ((ETurno)a.Turno).ToString(), Dia = ((EDias)a.Dia).ToString(), Profesor = b.Apellido, Estado = ((EEstadoCursada)a.Estado).ToString() };
+
+            return query.ToList();
+
+            //return _context.Cursadas.ToList();
         }
+
+        /// <summary>
+        /// Trae todas los cursos
+        /// </summary>
+        /// <param name="legajo"></param>
+        /// <returns></returns>
+        [HttpGet("postulaciones/{idCursada}")]
+        public ActionResult<List<PostulacionDTO>> GetPostulaciones(int idCursada)
+        {
+            var query = from a in _context.Postulaciones
+                        join b in _context.Usuarios on a.LegajoProfesor equals b.Legajo
+                        select new PostulacionDTO { IdCursada = a.IdCursada, Estado = a.Estado, LegajoProfesor = a.LegajoProfesor, Profesor = b.Apellido };
+            return query.ToList();
+        }
+
 
         /// <summary>
         /// Trae todas las Materias con cursadas activas de un usuario
@@ -144,6 +166,29 @@ namespace GestionAcademica.Controllers
 
             return rta;
         }
+        /// <summary>
+        /// Da de baja a un alumno de una cursada
+        /// </summary>
+        /// <param name="legajo"></param>
+        /// <param name="idCursada"></param>
+        /// <returns></returns>
+        [HttpPut("AsignarProfesor")]
+        public ActionResult<Cursada> AsignarProfesor(Postulacion postulacion)
+        {
+            var cursada = _context.Cursadas.FirstOrDefault(x => x.Id == postulacion.IdCursada);
+            if(cursada == null)
+            {
+                return NotFound();
+            }
+            cursada.Estado = 1;
+            cursada.IdProfesor = postulacion.LegajoProfesor;
+            _context.SaveChanges();
+
+            return cursada;
+            
+        }
+
+
 
         /// <summary>
         /// Trae todos los materiasles de una cursada
@@ -202,6 +247,7 @@ namespace GestionAcademica.Controllers
             }
             try
             {
+                cursada.IdProfesor = -1;
                 _context.Cursadas.Add(cursada);
                 _context.SaveChanges();
             }
