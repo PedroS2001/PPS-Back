@@ -47,8 +47,14 @@ namespace GestionAcademica.Controllers
             }
             try
             {
+                usuario.User.Estado = 1;
+                usuario.User.Clave = usuario.User.Dni;
+                usuario.User.FechaRegistro = DateTime.Now;
+                usuario.Domicilio.IdPais = 1;
+
                 _context.Domicilios.Add(usuario.Domicilio);
                 _context.SaveChanges();
+
                 usuario.User.IdDomicilio = usuario.Domicilio.Id;
                 _context.Usuarios.Add(usuario.User);
                 _context.SaveChanges();
