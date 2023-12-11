@@ -11328,11 +11328,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\pedro\\Desktop\\6_PPS\\GestionAcademica\\GestionAcademica\\GestionAcademica.csproj",
+      "projectUniqueName": "C:\\Users\\pedro\\Desktop\\6_PPS\\PPS-Back\\GestionAcademica\\GestionAcademica.csproj",
       "projectName": "GestionAcademica",
-      "projectPath": "C:\\Users\\pedro\\Desktop\\6_PPS\\GestionAcademica\\GestionAcademica\\GestionAcademica.csproj",
+      "projectPath": "C:\\Users\\pedro\\Desktop\\6_PPS\\PPS-Back\\GestionAcademica\\GestionAcademica.csproj",
       "packagesPath": "C:\\Users\\pedro\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\pedro\\Desktop\\6_PPS\\GestionAcademica\\GestionAcademica\\obj\\",
+      "outputPath": "C:\\Users\\pedro\\Desktop\\6_PPS\\PPS-Back\\GestionAcademica\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\pedro\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -118,6 +118,7 @@ public partial class GestionAcademicaCopiaContext : DbContext
             entity.Property(e => e.Cuatrimestre).HasColumnName("cuatrimestre");
             entity.Property(e => e.IdMateria).HasColumnName("id_materia");
             entity.Property(e => e.IdProfesor).HasColumnName("id_profesor");
+            entity.Property(e => e.MaxAlumnos).HasColumnName("max_alumnos");
         });
 
         modelBuilder.Entity<CarreraMateria>(entity =>

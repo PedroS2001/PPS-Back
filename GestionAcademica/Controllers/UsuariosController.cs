@@ -83,6 +83,36 @@ namespace GestionAcademica.Controllers
 
             return usuario;
         }
+
+        [HttpPut("")]
+        public IActionResult ModificarEstado(Usuario usuario)
+        {
+            var user = _context.Usuarios.Find(usuario.Legajo);
+
+            if (user == null)
+            {
+                return BadRequest("No se encontro el usuario");
+            }
+            try
+            {
+                if (user.Estado == 0)
+                {
+                    user.Estado = 1;
+                }
+                else if (user.Estado == 1)
+                {
+                    user.Estado = 0;
+                }
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+
+            }
+
+            return Ok(user);
+        }
+
         #endregion
 
         [HttpPost("Login")]

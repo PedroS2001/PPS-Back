@@ -8,5 +8,6 @@
         public string Turno { get; set; }
         public string Dia { get; set; }
         public string Estado { get; set; }
+        public int MaxAlumnos { get; set; }
     }
 }

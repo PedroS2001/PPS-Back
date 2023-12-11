@@ -21,4 +21,6 @@ public partial class Cursada
 
     public int? IdProfesor { get; set; }
 
+    public int MaxAlumnos { get; set; }
+
 }

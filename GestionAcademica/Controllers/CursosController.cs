@@ -302,7 +302,20 @@ namespace GestionAcademica.Controllers
             UsuarioCursada usuarioCursada = new UsuarioCursada() { IdCursada = idCursada, LegajoAlumno = legajo, Activa = 1 };
             try
             {
-                //TODO:  Validar que el alumno tenga las cuotas al dia 
+                var laCursada = _context.Cursadas.Find(idCursada);
+                if (laCursada == null)
+                {
+                    return BadRequest("La cursada no existe");
+                }
+
+                #region Valido que haya lugar
+                int inscriptos = _context.UsuarioCursada.Select(x => x.IdCursada == idCursada).Count();
+
+                if (laCursada.MaxAlumnos <= inscriptos)
+                {
+                    return BadRequest("Las cursada ya esta completa");
+                }
+                #endregion
 
                 #region Valido Correlativas
                 var querymateriaCorrelativa = from a in _context.Cursadas
@@ -335,11 +348,6 @@ namespace GestionAcademica.Controllers
 
                 var cursadasAlumno = query.ToList();
 
-                var laCursada = _context.Cursadas.Find(idCursada);
-                if (laCursada == null)
-                {
-                    return BadRequest("La cursada no existe");
-                }
 
                 foreach (var cursada in cursadasAlumno)
                 {
@@ -439,15 +447,15 @@ namespace GestionAcademica.Controllers
 
 
 
-        [HttpPost("CargarAsistencias")]
-        public ActionResult<List<Asistencia>> CargarAsistencias(List<Asistencia> asistencias)
-        {
+        //[HttpPost("CargarAsistencias")]
+        //public ActionResult<List<Asistencia>> CargarAsistencias(List<Asistencia> asistencias)
+        //{
 
-            this._context.Asistencias.AddRange(asistencias);
-            this._context.SaveChanges();
+        //    this._context.Asistencias.AddRange(asistencias);
+        //    this._context.SaveChanges();
 
-            return asistencias;
-        }
+        //    return asistencias;
+        //}
         #endregion
 
         #region NOTAS
@@ -490,7 +498,28 @@ namespace GestionAcademica.Controllers
         }
         #endregion
 
+        #region Asistencias
+        [HttpPost("CargarAsistencias")]
+        public ActionResult<List<Asistencia>> CargarAsistencias(List<Asistencia> asistencias)
+        {
+            try
+            {
+                foreach (var item in asistencias)
+                {
+                    item.Fecha = DateTime.Now;
+                }
+                _context.Asistencias.AddRange(asistencias);
+                this._context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
+            return asistencias;
+        }
+
+        #endregion
 
     }
 }

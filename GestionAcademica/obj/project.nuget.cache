@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "lMureRa7DU4hF9+VTsuC+puMFGUjF5GELhl+B6N+wXXVTYA37tc0wBjvnq079m9Lb/0wbB2W0o07fBqnpuNHaw==",
+  "dgSpecHash": "hVZQm/n5EtlPt05sQbDzGrEBdsIt8EohWkyEq/zmKnHCKKCtb4R27B2OaoYZ39DrwdkRqIxpPaZUf8lIsmfmOA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\pedro\\Desktop\\6_PPS\\GestionAcademica\\GestionAcademica\\GestionAcademica.csproj",
+  "projectFilePath": "C:\\Users\\pedro\\Desktop\\6_PPS\\PPS-Back\\GestionAcademica\\GestionAcademica.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\pedro\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\pedro\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
