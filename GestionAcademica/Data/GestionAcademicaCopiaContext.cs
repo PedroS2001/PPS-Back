@@ -80,7 +80,10 @@ public partial class GestionAcademicaCopiaContext : DbContext
 
         modelBuilder.Entity<Postulacion>(entity =>
         {
-            entity.HasNoKey();
+            entity.HasKey(e => e.IdPostulacion).HasName("PK_Postulaciones");
+
+            entity.Property(e => e.IdPostulacion)
+                .HasColumnName("id_postulacion");
 
             entity.Property(e => e.IdCursada).HasColumnName("id_cursada");
             entity.Property(e => e.LegajoProfesor).HasColumnName("legajo_profesor");

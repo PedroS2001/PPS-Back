@@ -24,7 +24,7 @@ namespace GestionAcademica.Controllers
         }
 
         /// <summary>
-        /// Trae todas las carreras y su ID
+        /// Trae todas las carreras y agrupadas por facultades
         /// </summary>
         /// <returns></returns>
         [HttpGet("Carreras")]
@@ -59,7 +59,7 @@ namespace GestionAcademica.Controllers
         }
 
         /// <summary>
-        /// Trae todas las materias de una carrera
+        /// Trae todas las materias
         /// </summary>
         /// <param name="idCarrera"></param>
         /// <returns></returns>
@@ -70,7 +70,6 @@ namespace GestionAcademica.Controllers
             {
                 return NotFound();
             }
-
 
             return _context.Materias.ToList();
         }
@@ -128,7 +127,6 @@ namespace GestionAcademica.Controllers
             }
 
             return _context.Novedades.Where(x => x.Id == idNovedad).FirstOrDefault();
-
         }
 
 

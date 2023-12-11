@@ -48,7 +48,7 @@ namespace GestionAcademica.Controllers
             try
             {
                 usuario.User.Estado = 1;
-                usuario.User.Clave = usuario.User.Dni;
+                usuario.User.Clave = "123123";//usuario.User.Dni;
                 usuario.User.FechaRegistro = DateTime.Now;
                 usuario.Domicilio.IdPais = 1;
 
@@ -113,11 +113,6 @@ namespace GestionAcademica.Controllers
 
             return query.ToList();
         }
-
-
-
-
-
 
         private bool UsuarioExists(int id)
         {
