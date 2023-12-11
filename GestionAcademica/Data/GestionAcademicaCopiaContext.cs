@@ -56,7 +56,6 @@ public partial class GestionAcademicaCopiaContext : DbContext
             entity.HasKey(e => e.Id).HasName("PK__Carreras__3213E83F6795CA3A");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(50)
@@ -123,9 +122,12 @@ public partial class GestionAcademicaCopiaContext : DbContext
 
         modelBuilder.Entity<CarreraMateria>(entity =>
         {
-            entity.HasNoKey()
-                .ToTable("carrera_materia");
+            entity
+                .ToTable("Carrera_materia")
+                .HasKey(e => e.IdCarreraMateria).HasName("PK_Carrera_materia_1");
 
+
+            entity.Property(e => e.IdCarreraMateria).HasColumnName("id_carrera_materia");
             entity.Property(e => e.IdCarrera).HasColumnName("id_carrera");
             entity.Property(e => e.IdMateria).HasColumnName("id_materia");
             entity.Property(e => e.Cuatrimestre).HasColumnName("cuatrimestre");

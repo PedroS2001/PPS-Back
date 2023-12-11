@@ -501,6 +501,7 @@ namespace GestionAcademica.Controllers
         #region Asistencias
         [HttpPost("CargarAsistencias")]
         public ActionResult<List<Asistencia>> CargarAsistencias(List<Asistencia> asistencias)
+
         {
             try
             {
