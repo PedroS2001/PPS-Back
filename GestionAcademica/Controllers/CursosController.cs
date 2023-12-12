@@ -459,17 +459,6 @@ namespace GestionAcademica.Controllers
             return rta.ToList();
         }
 
-
-
-        //[HttpPost("CargarAsistencias")]
-        //public ActionResult<List<Asistencia>> CargarAsistencias(List<Asistencia> asistencias)
-        //{
-
-        //    this._context.Asistencias.AddRange(asistencias);
-        //    this._context.SaveChanges();
-
-        //    return asistencias;
-        //}
         #endregion
 
         #region NOTAS

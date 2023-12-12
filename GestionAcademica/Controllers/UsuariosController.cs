@@ -182,6 +182,10 @@ namespace GestionAcademica.Controllers
             {
                 return Problem("Correo o clave invalida");
             }
+            if (user.Estado == 0)
+            {
+                return Problem("El usuario se encuentra deshabilitado.");
+            }
             return user;
         }
 
@@ -202,6 +206,20 @@ namespace GestionAcademica.Controllers
 
             return query.ToList();
         }
+
+
+        [HttpGet("Asistencias/{legajo}")]
+        public ActionResult<List<AsistenciaDTO>> GetAsistencias(int legajo)
+        {
+            var query = from a in _context.Asistencias
+                        join b in _context.Cursadas on a.Id_cursada equals b.Id
+                        join c in _context.Materias on b.IdMateria equals c.Id
+                        where a.Legajo_alumno == legajo
+                        select new AsistenciaDTO { Id_Asistencia = a.Id_Asistencia, Id_cursada = a.Id_cursada, Concurrio = a.Concurrio, Fecha = a.Fecha, Legajo_alumno = a.Legajo_alumno, Materia = c.Nombre };
+
+            return query.ToList();
+        }
+
 
         private bool UsuarioExists(int id)
         {
