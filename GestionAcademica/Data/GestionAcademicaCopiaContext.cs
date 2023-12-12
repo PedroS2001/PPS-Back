@@ -298,6 +298,7 @@ public partial class GestionAcademicaCopiaContext : DbContext
             entity.Property(e => e.Sexo).HasColumnName("sexo");
             entity.Property(e => e.TipoUsuario).HasColumnName("tipo_usuario");
             entity.Property(e => e.Estado).HasColumnName("estado");
+            entity.Property(e => e.ModificoClave).HasColumnName("modifico_clave");
 
         });
 

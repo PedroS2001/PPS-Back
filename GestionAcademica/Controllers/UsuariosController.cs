@@ -48,7 +48,8 @@ namespace GestionAcademica.Controllers
             try
             {
                 usuario.User.Estado = 1;
-                usuario.User.Clave = "123123";//usuario.User.Dni;
+                usuario.User.Clave = usuario.User.Dni;
+                usuario.User.ModificoClave = 0;
                 usuario.User.FechaRegistro = DateTime.Now;
                 usuario.Domicilio.IdPais = 1;
 
@@ -86,6 +87,29 @@ namespace GestionAcademica.Controllers
             }
 
             return rta;
+        }
+
+        [HttpPut("ModificarClave")]
+        public IActionResult ModificarClave(Usuario usuario)
+        {
+            var user = _context.Usuarios.Find(usuario.Legajo);
+
+            if (user == null)
+            {
+                return BadRequest("No se encontro el usuario");
+            }
+            try
+            {
+                user.Clave = usuario.Clave;
+                user.ModificoClave = 1;
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+
+            }
+
+            return Ok(user);
         }
 
         [HttpPut("ModificarEstado")]

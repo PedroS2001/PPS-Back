@@ -25,6 +25,8 @@ public partial class Usuario
 
     public int? Sexo { get; set; }
 
+    public int ModificoClave { get; set; }
+
     public int? TipoUsuario { get; set; }
 
     public DateTime? FechaRegistro { get; set; }
