@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GestionAcademica.Data;
 using GestionAcademica.Models;
+using GestionAcademica.DTO;
 
 namespace GestionAcademica.Controllers
 {
@@ -105,7 +106,8 @@ namespace GestionAcademica.Controllers
                 _context.Novedades.Add(novedad);
                 _context.SaveChanges();
 
-                return Ok();
+                ResponseDTO rta = new ResponseDTO() { Status = 200, Message = "Novedad Cargada con exito" };
+                return Ok(rta);
             }
             catch (Exception e)
             {

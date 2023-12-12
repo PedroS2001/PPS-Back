@@ -136,7 +136,7 @@ namespace GestionAcademica.Controllers
             {
             }
 
-            return Created("Mateira", materia);
+            return Created("Materia", materia);
         }
 
         // DELETE: api/Materias/5

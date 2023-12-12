@@ -420,8 +420,22 @@ namespace GestionAcademica.Controllers
         /// <param name="material"></param>
         /// <returns></returns>
         [HttpPost("Material")]
-        public ActionResult<Material> AgregarMaterialCursada(Material material)
+        public ActionResult<Material> AgregarMaterialCursada([FromForm] string titulo, [FromForm] string texto, [FromForm] int tipo, [FromForm] int idCursada, [FromForm] IFormFile? file)
         {
+
+            var material = new Material();
+
+            if (file != null)
+            {
+                MemoryStream memoryStream = new MemoryStream();
+                file.CopyTo(memoryStream);
+                material.FilePath = Convert.ToBase64String(memoryStream.ToArray());
+            }
+
+            material.Titulo = titulo;
+            material.IdCursada = idCursada;
+            material.Texto = texto;
+            material.Tipo = tipo;
             material.FechaPublicacion = DateTime.Now;
             var rta = _context.Materiales.Add(material);
             _context.SaveChanges();
