@@ -81,21 +81,37 @@ namespace GestionAcademica.Controllers
             return NoContent();
         }
 
-        // POST: api/Novedades
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Novedad>> PostNovedad([FromForm] IFormFile file, [FromForm] Novedad novedad)
+        public ActionResult PostNovedad([FromForm] IFormFile file, [FromForm] string titulo, [FromForm] string copete, [FromForm] string texto, [FromForm] bool snMostrar)
         {
-            if (_context.Novedades == null)
+            try
             {
-                return Problem("Entity set 'GestionAcademicaCopiaContext.Novedades'  is null.");
+                if (_context.Novedades == null)
+                {
+                    return Problem("Entity set 'GestionAcademicaCopiaContext.Novedades'  is null.");
+                }
+                MemoryStream memoryStream = new MemoryStream();
+
+                var novedad = new Novedad();
+                novedad.Titulo = titulo;
+                novedad.FechaPublicacion = DateTime.Now;
+                novedad.Copete = copete;
+                novedad.Texto = texto;
+                novedad.SnMostrar = (snMostrar) ? 1 : 0;
+
+                file.CopyTo(memoryStream);
+
+                novedad.Imagen = Convert.ToBase64String(memoryStream.ToArray());
+                _context.Novedades.Add(novedad);
+                _context.SaveChanges();
+
+                return Ok();
             }
-            _context.Novedades.Add(novedad);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetNovedad", new { id = novedad.Id }, novedad);
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
-
         // DELETE: api/Novedades/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteNovedad(int id)
