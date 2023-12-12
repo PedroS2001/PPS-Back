@@ -70,8 +70,9 @@ public partial class GestionAcademicaCopiaContext : DbContext
 
         modelBuilder.Entity<Correlativa>(entity =>
         {
-            entity.HasNoKey();
+            entity.HasKey(e => e.IdTablaCorrelativas).HasName("PK_Correlativas");
 
+            entity.Property(e => e.IdTablaCorrelativas).HasColumnName("id_tabla_correlativas");
             entity.Property(e => e.IdMateria).HasColumnName("id_materia");
             entity.Property(e => e.IdMateriaCorrelativa).HasColumnName("id_materia_correlativa");
 
@@ -169,7 +170,6 @@ public partial class GestionAcademicaCopiaContext : DbContext
             entity.HasKey(e => e.Id).HasName("PK__Materias__3213E83F0480E68C");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(50)

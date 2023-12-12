@@ -116,14 +116,14 @@ namespace GestionAcademica.Controllers
         /// </summary>
         /// <param name="legajo"></param>
         /// <returns></returns>
-        [HttpGet("ParaInscribir")]
-        public ActionResult<List<CursadaDTO>> GetCursadasParaInscribir()
+        [HttpGet("ParaInscribir/{idCarrera}")]
+        public ActionResult<List<CursadaDTO>> GetCursadasParaInscribir(int idCarrera)
         {
             var query = from c in _context.Cursadas
-                            //join um in _context.UsuarioCursada on c.Id equals um.IdCursada
                         join m in _context.Materias on c.IdMateria equals m.Id
+                        join a in _context.CarrerasMaterias on m.Id equals a.IdMateria
                         join p in _context.Usuarios on c.IdProfesor equals p.Legajo
-                        where c.Estado == (int)EEstadoCursada.Asignada
+                        where c.Estado == (int)EEstadoCursada.Asignada && a.IdCarrera == idCarrera
                         select new CursadaDTO { Id = c.Id, Materia = m.Nombre, Turno = ((ETurno)c.Turno).ToString(), Dia = ((EDias)c.Dia).ToString(), Profesor = p.Apellido, Estado = ((EEstadoCursada)c.Estado).ToString() };
 
             return query.ToList();

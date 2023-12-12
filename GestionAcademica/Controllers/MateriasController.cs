@@ -26,10 +26,10 @@ namespace GestionAcademica.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Materia>>> GetMaterias()
         {
-          if (_context.Materias == null)
-          {
-              return NotFound();
-          }
+            if (_context.Materias == null)
+            {
+                return NotFound();
+            }
             return await _context.Materias.ToListAsync();
         }
 
@@ -61,10 +61,10 @@ namespace GestionAcademica.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Materia>> GetMateria(int id)
         {
-          if (_context.Materias == null)
-          {
-              return NotFound();
-          }
+            if (_context.Materias == null)
+            {
+                return NotFound();
+            }
             var materia = await _context.Materias.FindAsync(id);
 
             if (materia == null)
@@ -109,30 +109,34 @@ namespace GestionAcademica.Controllers
         // POST: api/Materias
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Materia>> PostMateria(Materia materia)
+        public async Task<ActionResult<MateriasDTO>> PostMateria(MateriasDTO materia)
         {
-          if (_context.Materias == null)
-          {
-              return Problem("Entity set 'GestionAcademicaCopiaContext.Materias'  is null.");
-          }
-            _context.Materias.Add(materia);
+            if (_context.Materias == null)
+            {
+                return Problem("Entity set 'GestionAcademicaCopiaContext.Materias'  is null.");
+            }
+
+            Materia mat = new Materia();
+            mat.Nombre = materia.Nombre;
+            mat.CargaHoraria = materia.CargaHoraria;
+
+            _context.Materias.Add(mat);
             try
             {
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
+
+                Correlativa c = new Correlativa();
+                c.IdMateria = mat.Id;
+                c.IdMateriaCorrelativa = materia.Correlativas;
+
+                _context.Correlativas.Add(c);
+                _context.SaveChanges();
             }
             catch (DbUpdateException)
             {
-                if (MateriaExists(materia.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
             }
 
-            return CreatedAtAction("GetMateria", new { id = materia.Id }, materia);
+            return Created("Mateira", materia);
         }
 
         // DELETE: api/Materias/5

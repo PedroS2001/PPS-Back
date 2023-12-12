@@ -68,23 +68,27 @@ namespace GestionAcademica.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Usuario>> GetUsuario(int id)
+        public async Task<ActionResult<UsuarioDomicilioDTO>> GetUsuario(int id)
         {
             if (_context.Usuarios == null)
             {
                 return NotFound();
             }
             var usuario = await _context.Usuarios.FindAsync(id);
+            var domicilio = _context.Domicilios.FirstOrDefault(x => x.Id == (int)usuario.IdDomicilio);
+            UsuarioDomicilioDTO rta = new UsuarioDomicilioDTO();
+            rta.User = usuario;
+            rta.Domicilio = domicilio;
 
             if (usuario == null)
             {
                 return NotFound();
             }
 
-            return usuario;
+            return rta;
         }
 
-        [HttpPut("")]
+        [HttpPut("ModificarEstado")]
         public IActionResult ModificarEstado(Usuario usuario)
         {
             var user = _context.Usuarios.Find(usuario.Legajo);
@@ -103,6 +107,37 @@ namespace GestionAcademica.Controllers
                 {
                     user.Estado = 0;
                 }
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+
+            }
+
+            return Ok(user);
+        }
+
+        [HttpPut("")]
+        public IActionResult ModificarEstado(UsuarioDomicilioDTO usuario)
+        {
+            var user = _context.Usuarios.Find(usuario.User.Legajo);
+            var domicilio = _context.Domicilios.Find(usuario.Domicilio.Id);
+
+            if (user == null || domicilio == null)
+            {
+                return BadRequest("No se encontro el usuario");
+            }
+            user.Correo = usuario.User.Correo;
+            domicilio.Provincia = usuario.Domicilio.Provincia;
+            domicilio.Localidad = usuario.Domicilio.Localidad;
+            domicilio.CodigoPostal = usuario.Domicilio.CodigoPostal;
+            domicilio.Altura = usuario.Domicilio.Altura;
+            domicilio.Calle = usuario.Domicilio.Calle;
+            domicilio.Piso = usuario.Domicilio.Piso;
+            domicilio.Departamento = usuario.Domicilio.Departamento;
+
+            try
+            {
                 _context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
